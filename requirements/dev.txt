@@ -1,5 +1,5 @@
 # requirements/dev.txt
--r https://raw.githubusercontent.com/course-files/ServingMLModels/refs/heads/main/requirements/base.txt
+-r base.txt
 
 seaborn
 python-dotenv
