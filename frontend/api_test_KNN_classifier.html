@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KNN Classifier - Predict Late Delivery Risk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            max-width: 500px;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Predict Late Delivery Risk using a KNN Classifier</h2>
+
+<form id="predictForm">
+    <label for="Days_for_shipping_real">Days for Shipping (Real):</label>
+    <input type="number" id="Days_for_shipping_real" name="Days_for_shipping_real" value="3" required>
+
+    <label for="Days_for_shipment_scheduled">Days for Shipment (Scheduled):</label>
+    <input type="number" id="Days_for_shipment_scheduled" name="Days_for_shipment_scheduled" value="4" required>
+
+    <label for="Order_Item_Quantity">Order Item Quantity:</label>
+    <input type="number" id="Order_Item_Quantity" name="Order_Item_Quantity" value="1" required>
+
+    <label for="Sales">Sales:</label>
+    <input type="number" id="Sales" name="Sales" step="0.01" value="250.00" required>
+
+    <label for="Order_Profit_Per_Order">Order Profit Per Order:</label>
+    <input type="number" id="Order_Profit_Per_Order" name="Order_Profit_Per_Order" step="0.01" value="64.17" required>
+
+    <label for="Shipping_Mode">Shipping Mode:</label>
+    <select id="Shipping_Mode" name="Shipping_Mode" required>
+        <option value="Standard Class" selected>Standard Class</option>
+        <option value="Second Class">Second Class</option>
+        <option value="First Class">First Class</option>
+        <option value="Same Day">Same Day</option>
+    </select>
+
+    <button type="submit">Predict</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('predictForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const data = {
+            Days_for_shipping_real: parseInt(document.getElementById('Days_for_shipping_real').value),
+            Days_for_shipment_scheduled: parseInt(document.getElementById('Days_for_shipment_scheduled').value),
+            Order_Item_Quantity: parseInt(document.getElementById('Order_Item_Quantity').value),
+            Sales: parseFloat(document.getElementById('Sales').value),
+            Order_Profit_Per_Order: parseFloat(document.getElementById('Order_Profit_Per_Order').value),
+            Shipping_Mode: document.getElementById('Shipping_Mode').value
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/v1/models/knn-classifier/predictions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            const prediction = result['Predicted Late Delivery Risk = '];
+            document.getElementById('result').innerText = 'Prediction: ' + prediction + (prediction === 1 ? ' (Late Delivery)' : ' (On-time Delivery)');
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerText = 'An error occurred while making the prediction.';
+        }
+    });
+</script>
+
+</body>
+</html>

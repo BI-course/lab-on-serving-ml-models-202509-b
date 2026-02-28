@@ -14,7 +14,9 @@ from flask import Flask, request, jsonify
 # To support this safely, CORS lets servers explicitly allow such requests.
 from flask_cors import CORS
 import joblib
+import numpy as np
 import pandas as pd
+import ast
 
 app = Flask(__name__)
 # CORS(
@@ -51,6 +53,28 @@ CORS(
 decisiontree_classifier_baseline = joblib.load('./model/decisiontree_classifier_baseline.pkl')
 decisiontree_regressor_optimum = joblib.load('./model/decisiontree_regressor_optimum.pkl')
 label_encoders_1b = joblib.load('./model/label_encoders_1b.pkl')
+
+# Load Naive Bayes classifier and its label encoders
+naive_bayes_classifier_optimum = joblib.load('./model/naive_Bayes_classifier_optimum.pkl')
+label_encoders_2 = joblib.load('./model/label_encoders_2.pkl')
+
+# Load KNN classifier, its one-hot encoder, and scaler
+knn_classifier_optimum = joblib.load('./model/knn_classifier_optimum.pkl')
+onehot_encoder_3 = joblib.load('./model/onehot_encoder_3.pkl')
+scaler_3 = joblib.load('./model/scaler_3.pkl')
+
+# Load SVM classifier, its label encoders, and scaler
+support_vector_classifier_optimum = joblib.load('./model/support_vector_classifier_optimum.pkl')
+label_encoders_4 = joblib.load('./model/label_encoders_4.pkl')
+scaler_4 = joblib.load('./model/scaler_4.pkl')
+
+# Load Random Forest classifier, its label encoders, and scaler
+random_forest_classifier_optimum = joblib.load('./model/random_forest_classifier_optimum.pkl')
+label_encoders_5 = joblib.load('./model/label_encoders_5.pkl')
+scaler_5 = joblib.load('./model/scaler_5.pkl')
+
+# Load association rules for the product recommender
+association_rules = pd.read_csv('./model/top_rules_7b.csv')
 
 # Defines an HTTP endpoint
 @app.route('/api/v1/models/decision-tree-classifier/predictions', methods=['POST'])
@@ -154,6 +178,7 @@ def predict_decision_tree_regressor():
         'PaymentDate_dayofweek'
     ]
 
+
     # Reorder and select only the expected columns
     new_data = new_data[expected_features]
 
@@ -204,6 +229,346 @@ def predict_decision_tree_regressor():
 #     -Method POST `
 #     -Body $body `
 #     -ContentType "application/json"
+
+# ============================================================================
+# Naive Bayes Classifier Endpoint
+# Dataset: Online Shoppers Purchasing Intention
+# Target: Revenue (0 = No Purchase, 1 = Purchase)
+# ============================================================================
+@app.route('/api/v1/models/naive-bayes-classifier/predictions', methods=['POST'])
+def predict_naive_bayes_classifier():
+    data = request.get_json()
+
+    new_data = pd.DataFrame([{
+        'Administrative': data.get('Administrative'),
+        'Administrative_Duration': data.get('Administrative_Duration'),
+        'Informational': data.get('Informational'),
+        'Informational_Duration': data.get('Informational_Duration'),
+        'ProductRelated': data.get('ProductRelated'),
+        'ProductRelated_Duration': data.get('ProductRelated_Duration'),
+        'BounceRates': data.get('BounceRates'),
+        'ExitRates': data.get('ExitRates'),
+        'PageValues': data.get('PageValues'),
+        'SpecialDay': data.get('SpecialDay'),
+        'Month': data.get('Month'),
+        'OperatingSystems': data.get('OperatingSystems'),
+        'Browser': data.get('Browser'),
+        'Region': data.get('Region'),
+        'TrafficType': data.get('TrafficType'),
+        'VisitorType': data.get('VisitorType'),
+        'Weekend': data.get('Weekend')
+    }])
+
+    # Encode categorical columns using label encoders
+    for col in ['Month', 'VisitorType', 'Weekend']:
+        if col in new_data.columns and col in label_encoders_2:
+            new_data[col] = label_encoders_2[col].transform(new_data[col])
+
+    expected_features = [
+        'Administrative', 'Administrative_Duration', 'Informational',
+        'Informational_Duration', 'ProductRelated', 'ProductRelated_Duration',
+        'BounceRates', 'ExitRates', 'PageValues', 'SpecialDay', 'Month',
+        'OperatingSystems', 'Browser', 'Region', 'TrafficType',
+        'VisitorType', 'Weekend'
+    ]
+    new_data = new_data[expected_features]
+
+    prediction = naive_bayes_classifier_optimum.predict(new_data)[0]
+    return jsonify({'Predicted Class = ': int(prediction)})
+
+# *1* Sample JSON POST values
+# {
+#     "Administrative": 0,
+#     "Administrative_Duration": 0.0,
+#     "Informational": 0,
+#     "Informational_Duration": 0.0,
+#     "ProductRelated": 1,
+#     "ProductRelated_Duration": 0.0,
+#     "BounceRates": 0.2,
+#     "ExitRates": 0.2,
+#     "PageValues": 0.0,
+#     "SpecialDay": 0.0,
+#     "Month": "Feb",
+#     "OperatingSystems": 1,
+#     "Browser": 1,
+#     "Region": 1,
+#     "TrafficType": 1,
+#     "VisitorType": "Returning_Visitor",
+#     "Weekend": false
+# }
+
+# *2.a.* Sample cURL POST values
+
+# curl -X POST http://127.0.0.1:5000/api/v1/models/naive-bayes-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d "{\"Administrative\": 0, \"Administrative_Duration\": 0.0, \"Informational\": 0, \"Informational_Duration\": 0.0, \"ProductRelated\": 1, \"ProductRelated_Duration\": 0.0, \"BounceRates\": 0.2, \"ExitRates\": 0.2, \"PageValues\": 0.0, \"SpecialDay\": 0.0, \"Month\": \"Feb\", \"OperatingSystems\": 1, \"Browser\": 1, \"Region\": 1, \"TrafficType\": 1, \"VisitorType\": \"Returning_Visitor\", \"Weekend\": false}"
+
+
+# ============================================================================
+# KNN Classifier Endpoint
+# Dataset: DataCo Smart Supply Chain
+# Target: Late_delivery_risk (0 = On-time, 1 = Late)
+# ============================================================================
+@app.route('/api/v1/models/knn-classifier/predictions', methods=['POST'])
+def predict_knn_classifier():
+    data = request.get_json()
+
+    new_data = pd.DataFrame([{
+        'Days for shipping (real)': data.get('Days_for_shipping_real'),
+        'Days for shipment (scheduled)': data.get('Days_for_shipment_scheduled'),
+        'Order Item Quantity': data.get('Order_Item_Quantity'),
+        'Sales': data.get('Sales'),
+        'Order Profit Per Order': data.get('Order_Profit_Per_Order'),
+        'Shipping Mode': data.get('Shipping_Mode')
+    }])
+
+    # One-hot encode 'Shipping Mode'
+    encoded = onehot_encoder_3.transform(new_data[['Shipping Mode']])
+    encoded_df = pd.DataFrame(
+        encoded,
+        columns=onehot_encoder_3.get_feature_names_out(['Shipping Mode']),
+        index=new_data.index
+    )
+
+    # Drop the original 'Shipping Mode' column and concatenate the encoded columns
+    new_data = pd.concat(
+        [new_data.drop('Shipping Mode', axis=1), encoded_df],
+        axis=1
+    )
+
+    # Scale the data using the fitted scaler
+    new_data_scaled = scaler_3.transform(new_data)
+
+    prediction = knn_classifier_optimum.predict(new_data_scaled)[0]
+    return jsonify({'Predicted Late Delivery Risk = ': int(prediction)})
+
+# *1* Sample JSON POST values
+# {
+#     "Days_for_shipping_real": 3,
+#     "Days_for_shipment_scheduled": 4,
+#     "Order_Item_Quantity": 1,
+#     "Sales": 250.0,
+#     "Order_Profit_Per_Order": 64.17,
+#     "Shipping_Mode": "Second Class"
+# }
+
+# *2.a.* Sample cURL POST values
+
+# curl -X POST http://127.0.0.1:5000/api/v1/models/knn-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d "{\"Days_for_shipping_real\": 3, \"Days_for_shipment_scheduled\": 4, \"Order_Item_Quantity\": 1, \"Sales\": 250.0, \"Order_Profit_Per_Order\": 64.17, \"Shipping_Mode\": \"Second Class\"}"
+
+
+# ============================================================================
+# SVM Classifier Endpoint
+# Dataset: Online Shoppers Purchasing Intention
+# Target: Revenue (0 = No Purchase, 1 = Purchase)
+# ============================================================================
+@app.route('/api/v1/models/svm-classifier/predictions', methods=['POST'])
+def predict_svm_classifier():
+    data = request.get_json()
+
+    new_data = pd.DataFrame([{
+        'Administrative': data.get('Administrative'),
+        'Administrative_Duration': data.get('Administrative_Duration'),
+        'Informational': data.get('Informational'),
+        'Informational_Duration': data.get('Informational_Duration'),
+        'ProductRelated': data.get('ProductRelated'),
+        'ProductRelated_Duration': data.get('ProductRelated_Duration'),
+        'BounceRates': data.get('BounceRates'),
+        'ExitRates': data.get('ExitRates'),
+        'PageValues': data.get('PageValues'),
+        'SpecialDay': data.get('SpecialDay'),
+        'Month': data.get('Month'),
+        'OperatingSystems': data.get('OperatingSystems'),
+        'Browser': data.get('Browser'),
+        'Region': data.get('Region'),
+        'TrafficType': data.get('TrafficType'),
+        'VisitorType': data.get('VisitorType'),
+        'Weekend': data.get('Weekend')
+    }])
+
+    # Encode categorical columns using label encoders
+    for col in ['Month', 'VisitorType', 'Weekend']:
+        if col in new_data.columns and col in label_encoders_4:
+            new_data[col] = label_encoders_4[col].transform(new_data[col])
+
+    expected_features = [
+        'Administrative', 'Administrative_Duration', 'Informational',
+        'Informational_Duration', 'ProductRelated', 'ProductRelated_Duration',
+        'BounceRates', 'ExitRates', 'PageValues', 'SpecialDay', 'Month',
+        'OperatingSystems', 'Browser', 'Region', 'TrafficType',
+        'VisitorType', 'Weekend'
+    ]
+    new_data = new_data[expected_features]
+
+    # Scale the data using the fitted scaler
+    new_data_scaled = scaler_4.transform(new_data)
+
+    prediction = support_vector_classifier_optimum.predict(new_data_scaled)[0]
+    return jsonify({'Predicted Class = ': int(prediction)})
+
+# *1* Sample JSON POST values (same input format as Naive Bayes)
+# {
+#     "Administrative": 0,
+#     "Administrative_Duration": 0.0,
+#     "Informational": 0,
+#     "Informational_Duration": 0.0,
+#     "ProductRelated": 1,
+#     "ProductRelated_Duration": 0.0,
+#     "BounceRates": 0.2,
+#     "ExitRates": 0.2,
+#     "PageValues": 0.0,
+#     "SpecialDay": 0.0,
+#     "Month": "Feb",
+#     "OperatingSystems": 1,
+#     "Browser": 1,
+#     "Region": 1,
+#     "TrafficType": 1,
+#     "VisitorType": "Returning_Visitor",
+#     "Weekend": false
+# }
+
+# *2.a.* Sample cURL POST values
+
+# curl -X POST http://127.0.0.1:5000/api/v1/models/svm-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d "{\"Administrative\": 0, \"Administrative_Duration\": 0.0, \"Informational\": 0, \"Informational_Duration\": 0.0, \"ProductRelated\": 1, \"ProductRelated_Duration\": 0.0, \"BounceRates\": 0.2, \"ExitRates\": 0.2, \"PageValues\": 0.0, \"SpecialDay\": 0.0, \"Month\": \"Feb\", \"OperatingSystems\": 1, \"Browser\": 1, \"Region\": 1, \"TrafficType\": 1, \"VisitorType\": \"Returning_Visitor\", \"Weekend\": false}"
+
+
+# ============================================================================
+# Random Forest Classifier Endpoint
+# Dataset: Online Shoppers Purchasing Intention
+# Target: Revenue (0 = No Purchase, 1 = Purchase)
+# ============================================================================
+@app.route('/api/v1/models/random-forest-classifier/predictions', methods=['POST'])
+def predict_random_forest_classifier():
+    data = request.get_json()
+
+    new_data = pd.DataFrame([{
+        'Administrative': data.get('Administrative'),
+        'Administrative_Duration': data.get('Administrative_Duration'),
+        'Informational': data.get('Informational'),
+        'Informational_Duration': data.get('Informational_Duration'),
+        'ProductRelated': data.get('ProductRelated'),
+        'ProductRelated_Duration': data.get('ProductRelated_Duration'),
+        'BounceRates': data.get('BounceRates'),
+        'ExitRates': data.get('ExitRates'),
+        'PageValues': data.get('PageValues'),
+        'SpecialDay': data.get('SpecialDay'),
+        'Month': data.get('Month'),
+        'OperatingSystems': data.get('OperatingSystems'),
+        'Browser': data.get('Browser'),
+        'Region': data.get('Region'),
+        'TrafficType': data.get('TrafficType'),
+        'VisitorType': data.get('VisitorType'),
+        'Weekend': data.get('Weekend')
+    }])
+
+    # Encode categorical columns using label encoders
+    for col in ['Month', 'VisitorType', 'Weekend']:
+        if col in new_data.columns and col in label_encoders_5:
+            new_data[col] = label_encoders_5[col].transform(new_data[col])
+
+    expected_features = [
+        'Administrative', 'Administrative_Duration', 'Informational',
+        'Informational_Duration', 'ProductRelated', 'ProductRelated_Duration',
+        'BounceRates', 'ExitRates', 'PageValues', 'SpecialDay', 'Month',
+        'OperatingSystems', 'Browser', 'Region', 'TrafficType',
+        'VisitorType', 'Weekend'
+    ]
+    new_data = new_data[expected_features]
+
+    # Scale the data using the fitted scaler
+    new_data_scaled = scaler_5.transform(new_data)
+
+    prediction = random_forest_classifier_optimum.predict(new_data_scaled)[0]
+    return jsonify({'Predicted Class = ': int(prediction)})
+
+# *1* Sample JSON POST values (same input format as Naive Bayes and SVM)
+# {
+#     "Administrative": 0,
+#     "Administrative_Duration": 0.0,
+#     "Informational": 0,
+#     "Informational_Duration": 0.0,
+#     "ProductRelated": 1,
+#     "ProductRelated_Duration": 0.0,
+#     "BounceRates": 0.2,
+#     "ExitRates": 0.2,
+#     "PageValues": 0.0,
+#     "SpecialDay": 0.0,
+#     "Month": "Feb",
+#     "OperatingSystems": 1,
+#     "Browser": 1,
+#     "Region": 1,
+#     "TrafficType": 1,
+#     "VisitorType": "Returning_Visitor",
+#     "Weekend": false
+# }
+
+# *2.a.* Sample cURL POST values
+
+# curl -X POST http://127.0.0.1:5000/api/v1/models/random-forest-classifier/predictions \
+#   -H "Content-Type: application/json" \
+#   -d "{\"Administrative\": 0, \"Administrative_Duration\": 0.0, \"Informational\": 0, \"Informational_Duration\": 0.0, \"ProductRelated\": 1, \"ProductRelated_Duration\": 0.0, \"BounceRates\": 0.2, \"ExitRates\": 0.2, \"PageValues\": 0.0, \"SpecialDay\": 0.0, \"Month\": \"Feb\", \"OperatingSystems\": 1, \"Browser\": 1, \"Region\": 1, \"TrafficType\": 1, \"VisitorType\": \"Returning_Visitor\", \"Weekend\": false}"
+
+
+# ============================================================================
+# Product Recommender Endpoint
+# Based on association rules from the Groceries dataset (Hahsler et al., 2011)
+# ============================================================================
+@app.route('/api/v1/recommender/association-rules', methods=['POST'])
+def recommend_products():
+    data = request.get_json()
+    # Expects: {"products": ["whole milk", "other vegetables"]}
+    input_products = set(data.get('products', []))
+
+    if not input_products:
+        return jsonify({'error': 'Please provide a list of products'}), 400
+
+    recommendations = []
+    for _, rule in association_rules.iterrows():
+        # Parse the frozenset strings back to sets
+        antecedents = ast.literal_eval(rule['antecedents'].replace('frozenset(', '').rstrip(')'))
+        consequents = ast.literal_eval(rule['consequents'].replace('frozenset(', '').rstrip(')'))
+        antecedents = set(antecedents)
+        consequents = set(consequents)
+
+        # If the input products contain all antecedents, recommend the consequents
+        if antecedents.issubset(input_products):
+            for product in consequents:
+                if product not in input_products:
+                    recommendations.append({
+                        'recommended_product': product,
+                        'confidence': round(rule['confidence'], 4),
+                        'lift': round(rule['lift'], 4),
+                        'based_on': list(antecedents)
+                    })
+
+    # Remove duplicates and sort by lift (best recommendations first)
+    seen = set()
+    unique_recommendations = []
+    for rec in sorted(recommendations, key=lambda x: x['lift'], reverse=True):
+        if rec['recommended_product'] not in seen:
+            seen.add(rec['recommended_product'])
+            unique_recommendations.append(rec)
+
+    return jsonify({
+        'input_products': list(input_products),
+        'recommendations': unique_recommendations
+    })
+
+# *1* Sample JSON POST values
+# {
+#     "products": ["whole milk", "other vegetables"]
+# }
+
+# *2.a.* Sample cURL POST values
+
+# curl -X POST http://127.0.0.1:5000/api/v1/recommender/association-rules \
+#   -H "Content-Type: application/json" \
+#   -d "{\"products\": [\"whole milk\", \"other vegetables\"]}"
+
 
 # This ensures the Flask web server only starts when you run this file directly
 # (e.g., `python api.py`), and not if you import api.py from another script or test.

@@ -88,9 +88,23 @@
 
     <h2>List of API Endpoints</h2>
 
+    <h3>Classifiers</h3>
     <ul>
-        <li>Decision Tree Classifier API endpoint (POST): <strong>/api/predict_decision_tree_classifier</strong> - sample HTML page: <a href="api_test_DT_classifier.html" target="_blank">api_test_DT_classifier.html</a></li>
-        <li>Decision Tree Regressor API endpoint (POST): <strong>/api/predict_decision_tree_regressor</strong> - sample HTML page: <a href="api_test_DT_regressor.html" target="_blank">api_test_DT_regressor.html</a></li>
+        <li>Decision Tree Classifier API endpoint (POST): <strong>/api/v1/models/decision-tree-classifier/predictions</strong> - sample HTML page: <a href="api_test_DT_classifier.html" target="_blank">api_test_DT_classifier.html</a></li>
+        <li>Naive Bayes Classifier API endpoint (POST): <strong>/api/v1/models/naive-bayes-classifier/predictions</strong> - sample HTML page: <a href="api_test_NB_classifier.html" target="_blank">api_test_NB_classifier.html</a></li>
+        <li>KNN Classifier API endpoint (POST): <strong>/api/v1/models/knn-classifier/predictions</strong> - sample HTML page: <a href="api_test_KNN_classifier.html" target="_blank">api_test_KNN_classifier.html</a></li>
+        <li>SVM Classifier API endpoint (POST): <strong>/api/v1/models/svm-classifier/predictions</strong> - sample HTML page: <a href="api_test_SVM_classifier.html" target="_blank">api_test_SVM_classifier.html</a></li>
+        <li>Random Forest Classifier API endpoint (POST): <strong>/api/v1/models/random-forest-classifier/predictions</strong> - sample HTML page: <a href="api_test_RF_classifier.html" target="_blank">api_test_RF_classifier.html</a></li>
+    </ul>
+
+    <h3>Regressor</h3>
+    <ul>
+        <li>Decision Tree Regressor API endpoint (POST): <strong>/api/v1/models/decision-tree-regressor/predictions</strong> - sample HTML page: <a href="api_test_DT_regressor.html" target="_blank">api_test_DT_regressor.html</a></li>
+    </ul>
+
+    <h3>Recommender</h3>
+    <ul>
+        <li>Product Recommender API endpoint (POST): <strong>/api/v1/recommender/association-rules</strong> - sample HTML page: <a href="api_test_recommender.html" target="_blank">api_test_recommender.html</a></li>
     </ul>
 </body>
 </html>

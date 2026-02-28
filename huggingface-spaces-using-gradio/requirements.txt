@@ -1,5 +1,6 @@
 gradio
 numpy
+pandas
 scikit-learn
 flask
 joblib

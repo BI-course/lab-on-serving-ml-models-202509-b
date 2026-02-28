@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Recommender - Association Rules</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            max-width: 600px;
+        }
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            height: 150px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        .recommendation {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+        .recommendation strong {
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Product Recommender using Association Rules</h2>
+<p>Select one or more grocery products you are purchasing, and the recommender will suggest additional products based on association rules mined from the Groceries dataset.</p>
+
+<form id="recommendForm">
+    <label for="products">Select Products (hold Ctrl/Cmd to select multiple):</label>
+    <select id="products" name="products" multiple required>
+        <option value="whole milk">Whole Milk</option>
+        <option value="other vegetables">Other Vegetables</option>
+        <option value="rolls/buns">Rolls/Buns</option>
+        <option value="root vegetables">Root Vegetables</option>
+        <option value="yogurt">Yogurt</option>
+        <option value="tropical fruit">Tropical Fruit</option>
+        <option value="soda">Soda</option>
+        <option value="bottled water">Bottled Water</option>
+        <option value="citrus fruit">Citrus Fruit</option>
+        <option value="whipped/sour cream">Whipped/Sour Cream</option>
+        <option value="pip fruit">Pip Fruit</option>
+        <option value="butter">Butter</option>
+        <option value="domestic eggs">Domestic Eggs</option>
+        <option value="pastry">Pastry</option>
+        <option value="curd">Curd</option>
+    </select>
+
+    <button type="submit">Get Recommendations</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('recommendForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const selectElement = document.getElementById('products');
+        const selectedProducts = Array.from(selectElement.selectedOptions).map(option => option.value);
+
+        if (selectedProducts.length === 0) {
+            document.getElementById('result').innerHTML = '<p style="color:red;">Please select at least one product.</p>';
+            return;
+        }
+
+        const data = {
+            products: selectedProducts
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/v1/recommender/association-rules', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            let html = '<h3>Your Products: ' + result.input_products.join(', ') + '</h3>';
+
+            if (result.recommendations && result.recommendations.length > 0) {
+                html += '<h3>Recommendations:</h3>';
+                result.recommendations.forEach(rec => {
+                    html += '<div class="recommendation">';
+                    html += '<strong>' + rec.recommended_product + '</strong>';
+                    html += ' (Confidence: ' + rec.confidence + ', Lift: ' + rec.lift + ')';
+                    html += '<br><small>Based on: ' + rec.based_on.join(', ') + '</small>';
+                    html += '</div>';
+                });
+            } else {
+                html += '<p>No recommendations found for the selected products. Try selecting different combinations like "whole milk" + "other vegetables".</p>';
+            }
+
+            document.getElementById('result').innerHTML = html;
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerHTML = '<p style="color:red;">An error occurred while getting recommendations.</p>';
+        }
+    });
+</script>
+
+</body>
+</html>

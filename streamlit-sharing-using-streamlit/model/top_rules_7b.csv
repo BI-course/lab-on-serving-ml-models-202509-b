@@ -1,0 +1,10 @@
+antecedents,consequents,support,confidence,lift
+"frozenset({'other vegetables', 'whole milk'})",frozenset({'root vegetables'}),0.023182511438739197,0.30978260869565216,2.84208204899416
+frozenset({'pip fruit'}),frozenset({'tropical fruit'}),0.02043721403152008,0.2701612903225806,2.5746475681420353
+"frozenset({'whole milk', 'root vegetables'})",frozenset({'other vegetables'}),0.023182511438739197,0.47401247401247404,2.4497701954349353
+"frozenset({'other vegetables', 'whole milk'})",frozenset({'yogurt'}),0.02226741230299949,0.2975543478260869,2.132978870896184
+frozenset({'whipped/sour cream'}),frozenset({'other vegetables'}),0.02887646161667514,0.40283687943262414,2.081923651718265
+frozenset({'whipped/sour cream'}),frozenset({'yogurt'}),0.02074224707676665,0.2893617021276596,2.0742509769865394
+"frozenset({'whole milk', 'yogurt'})",frozenset({'other vegetables'}),0.02226741230299949,0.39745916515426494,2.0541307878571704
+"frozenset({'other vegetables', 'yogurt'})",frozenset({'whole milk'}),0.02226741230299949,0.5128805620608898,2.0072345116867694
+frozenset({'tropical fruit'}),frozenset({'yogurt'}),0.029283172343670564,0.27906976744186046,2.0004746084480303
