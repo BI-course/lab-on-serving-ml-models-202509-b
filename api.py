@@ -55,7 +55,7 @@ decisiontree_regressor_optimum = joblib.load('./model/decisiontree_regressor_opt
 label_encoders_1b = joblib.load('./model/label_encoders_1b.pkl')
 
 # Load Naive Bayes classifier and its label encoders
-naive_bayes_classifier_optimum = joblib.load('./model/naive_Bayes_classifier_optimum.pkl')
+naive_bayes_classifier_optimum = joblib.load('./model/naive_Bayes_classifier_optimum.pkl')  # Note: capital B in Bayes
 label_encoders_2 = joblib.load('./model/label_encoders_2.pkl')
 
 # Load KNN classifier, its one-hot encoder, and scaler

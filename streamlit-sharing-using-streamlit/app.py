@@ -15,7 +15,7 @@ dt_classifier = joblib.load(os.path.join(model_dir,
                                          "decisiontree_classifier_baseline.pkl"))
 
 nb_classifier = joblib.load(os.path.join(model_dir,
-                                         "naive_bayes_classifier_optimum.pkl"))
+                                         "naive_Bayes_classifier_optimum.pkl"))
 label_encoders_2 = joblib.load(os.path.join(model_dir,
                                             "label_encoders_2.pkl"))
 
