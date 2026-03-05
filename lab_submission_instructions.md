@@ -4,15 +4,15 @@
 
 ## Student Details and Individual Member Contributions
 
-**Name of the team on GitHub Classroom:**
+**Name of the team on GitHub Classroom:** lab-on-serving-ml-models-202509-b
 
 **Member 1:**
 
 | **Details**                                                                                                                           | **Comment** |
 |:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+| **Student ID**                                                                                                                        | 149008      |
+| **Name**                                                                                                                              | Godwill Kiplagat |
+| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Implemented the entire lab on the [main branch](https://github.com/BI-course/lab-on-serving-ml-models-202509-b/tree/main):<br/>**Part A:** Updated `api.py` with RESTful API endpoints for all 4 classifiers (Naive Bayes, KNN, SVM, Random Forest) plus the existing Decision Tree classifier and regressor. Each endpoint handles JSON input, applies the correct preprocessing (label encoding, one-hot encoding, scaling), and returns predictions.<br/>**Part B:** Added a product recommender endpoint based on Apriori association rules from the Groceries dataset. The endpoint accepts a list of products and returns recommended products with confidence and lift scores.<br/>**Frontend:** Created HTML test pages with forms for each API endpoint (NB, KNN, SVM, RF classifiers and Recommender). Updated `index.html` to list all 7 endpoints.<br/>**Public Hosting:** Updated the Streamlit app (`streamlit-sharing-using-streamlit/app.py`) with a multi-tab dashboard serving all models and the recommender. Deployed to Streamlit Community Cloud. >**What I learned:** How to serve ML models through RESTful APIs using Flask, how to handle preprocessing pipelines (label encoders, scalers, one-hot encoders) at inference time, the importance of case-sensitive file paths when deploying to Linux-based cloud platforms, and how to containerize Flask apps with Gunicorn + Nginx for production. |
 
 **Member 2:**
 
@@ -48,7 +48,7 @@
 
 ## Chosen Level of Difficulty
 
-**Specify the chosen level of difficulty** (baseline, intermediate, or advanced):
+**Specify the chosen level of difficulty** (baseline, intermediate, or advanced): Advanced
 
 ## Video Demonstration
 
@@ -60,7 +60,7 @@ Note that you are required to submit the link to the video and NOT the video its
 
 ## Public URL
 
-**Specify the public URL to the Gradio/Streamlit App**:
+**Specify the public URL to the Gradio/Streamlit App**: https://serving-ml-models-group-b.streamlit.app/
 
 ---
 
