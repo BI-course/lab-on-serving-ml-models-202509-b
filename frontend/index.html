@@ -1,96 +1,206 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Serving ML Models</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serving ML Models - BBT 4206 Demo</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 20px;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2, h3 { color: #2c3e50; }
+        table {
+            border-collapse: collapse;
+            width: 70%;
+            margin: 20px 0;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th { background: #ecf0f1; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 8px 0; }
+        .container { max-width: 1200px; margin: auto; }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        form { margin-bottom: 20px; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover { background: #2980b9; }
+        pre, .result {
+            background: #f4f6f9;
+            padding: 12px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            min-height: 60px;
+        }
+        .error { color: #c0392b; font-weight: bold; }
+        img { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
 </head>
 <body>
-    <h1>Serving Machine Learning Models through a RESTish API using Flask in Python</h1>
-    <table style="border-collapse: collapse; width: 60%;">
-        <tr>
-            <th style="border-bottom: 2px solid #000;"><strong>Key</strong></th>
-            <th style="border-bottom: 2px solid #000;"><strong>Value</strong></th>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-        <tr>
-            <td><strong>Course Codes</strong></td>
-            <td>BBT 4206</td>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-        <tr>
-            <td><strong>Course Names</strong></td>
-            <td>BBT 4206: Business Intelligence II (Week 4-6 of 13)</td>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-        <tr>
-            <td><strong>Semester</strong></td>
-            <td>January to April 2026</td>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-        <tr>
-            <td><strong>Lecturer</strong></td>
-            <td>Allan Omondi</td>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-        <tr>
-            <td><strong>Contact</strong></td>
-            <td>aomondi@strathmore.edu</td>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-        <tr>
-            <td><strong>Note</strong></td>
-            <td>
-                The lecture contains both theory and practice.<br>
-                This forms part of the practice.<br>
-                It is intended for educational purposes only.<br>
-                Recommended citation: <a href="https://raw.githubusercontent.com/course-files/ServingMLModels/refs/heads/main/RecommendedCitation.bib">BibTex</a>
-            </td>
-        </tr>
-        <tr><td colspan="2"><hr style="margin:0;"></td></tr>
-    </table>
 
-    <h2>Request Flow</h2>
-    <img src="RequestFlow.jpg" alt="Request Flow Diagram" style="display:block; background:#fff; padding:16px; border:1px solid #ccc; max-width:60%; margin-bottom:24px;">
-    <ol style="line-height:1.7;">
-        <li>
-            <strong>Client</strong> (Postman / cURL / frontend: web, mobile, desktop)<br>
-            <ul>
-                <li>Sends a request to <code>https://yourdomain/api/...</code></li>
-            </ul>
-        </li>
-        <li>
-            <strong>NGINX</strong> (reverse proxy)
-            <ul>
-                <li>Terminates HTTPS (handles SSL/TLS).</li>
-                <li>Serves static files if needed.</li>
-                <li>For <code>/api/...</code>, forwards the request internally to Gunicorn.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Gunicorn</strong> (Web Server Gateway Interface (WSGI) server)
-            <ul>
-                <li>Accepts HTTP requests from NGINX.</li>
-                <li>Manages multiple worker processes/threads.</li>
-                <li>Translates the raw HTTP into Python WSGI calls.</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Flask</strong> (WSGI app)
-            <ul>
-                <li>Your actual Python application logic.</li>
-                <li>Routes the request to the correct endpoint (<code>@app.route</code>).</li>
-                <li>Returns a response.</li>
-            </ul>
-        </li>
-    </ol>
-    <p style="margin-left:2em;">
-        <strong>Response returned back up:</strong><br>
-        Flask &rarr; Gunicorn &rarr; NGINX &rarr; Client
-    </p>
+<div class="container">
 
-    <h2>List of API Endpoints</h2>
+    <h1>Serving Machine Learning Models via Flask API</h1>
 
-    <ul>
-        <li>Decision Tree Classifier API endpoint (POST): <strong>/api/predict_decision_tree_classifier</strong> - sample HTML page: <a href="api_test_DT_classifier.html" target="_blank">api_test_DT_classifier.html</a></li>
-        <li>Decision Tree Regressor API endpoint (POST): <strong>/api/predict_decision_tree_regressor</strong> - sample HTML page: <a href="api_test_DT_regressor.html" target="_blank">api_test_DT_regressor.html</a></li>
-    </ul>
+    <div class="section">
+        <table>
+            <tr><th>Key</th><th>Value</th></tr>
+            <tr><td><strong>Course Code</strong></td><td>BBT 4206</td></tr>
+            <tr><td><strong>Course Name</strong></td><td>Business Intelligence II (Weeks 4–6)</td></tr>
+            <tr><td><strong>Semester</strong></td><td>January – April 2026</td></tr>
+            <tr><td><strong>Lecturer</strong></td><td>Allan Omondi</td></tr>
+            <tr><td><strong>Contact</strong></td><td><a href="mailto:aomondi@strathmore.edu">aomondi@strathmore.edu</a></td></tr>
+            <tr><td><strong>Note</strong></td><td>Educational use only.<br>Recommended citation: <a href="https://raw.githubusercontent.com/course-files/ServingMLModels/refs/heads/main/RecommendedCitation.bib">BibTeX</a></td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Request Flow (Architecture)</h2>
+        <img src="RequestFlow.jpg" alt="Request Flow: Client → NGINX → Gunicorn → Flask">
+        <p><strong>Flow:</strong> Client → NGINX (HTTPS + proxy) → Gunicorn (workers) → Flask (routes & models) → Response back</p>
+    </div>
+
+    <div class="section">
+        <h2>API Demo – Try Endpoints Directly</h2>
+
+        <!-- Recommender Demo -->
+        <h3>Product Recommender (Association Rules)</h3>
+        <form id="recommenderForm">
+            <label>Products bought (comma-separated):</label>
+            <input type="text" id="products" value="whole milk, other vegetables" placeholder="e.g. whole milk, yogurt, rolls/buns">
+            <button type="button" onclick="callRecommender()">Get Recommendations</button>
+        </form>
+        <div class="result" id="recommenderResult">Result will appear here...</div>
+
+        <!-- Shoppers Intention Classifier Demo (using Random Forest as example) -->
+        <h3>Purchase Intention Classifier (Random Forest / NB / SVM)</h3>
+        <form id="shoppersForm">
+            <label>Month (e.g. Feb, Mar):</label>
+            <input type="text" id="month" value="Feb">
+            <label>Visitor Type:</label>
+            <select id="visitorType">
+                <option>Returning_Visitor</option>
+                <option>New_Visitor</option>
+                <option>Other</option>
+            </select>
+            <label>Weekend:</label>
+            <select id="weekend"><option>false</option><option>true</option></select>
+            <button type="button" onclick="callClassifier('random-forest-classifier')">Predict (Random Forest)</button>
+            <button type="button" onclick="callClassifier('naive-bayes-classifier')">Predict (Naive Bayes)</button>
+        </form>
+        <div class="result" id="classifierResult">Result will appear here...</div>
+
+        <!-- Add more forms for other endpoints if desired (KNN, cluster, etc.) -->
+    </div>
+
+    <div class="section">
+        <h2>List of API Endpoints</h2>
+        <h3>Classifiers</h3>
+        <ul>
+            <li>Decision Tree Classifier → <code>POST /api/v1/models/decision-tree-classifier/predictions</code> (<a href="api_test_DT_classifier.html" target="_blank">test page</a>)</li>
+            <li>Naive Bayes → <code>POST /api/v1/models/naive-bayes-classifier/predictions</code></li>
+            <li>KNN → <code>POST /api/v1/models/knn-classifier/predictions</code></li>
+            <li>SVM → <code>POST /api/v1/models/svm-classifier/predictions</code></li>
+            <li>Random Forest → <code>POST /api/v1/models/random-forest-classifier/predictions</code></li>
+        </ul>
+
+        <h3>Regressor</h3>
+        <ul><li>Decision Tree Regressor → <code>POST /api/v1/models/decision-tree-regressor/predictions</code> (<a href="api_test_DT_regressor.html" target="_blank">test page</a>)</li></ul>
+
+        <h3>Recommender & Clustering</h3>
+        <ul>
+            <li>Association Rules Recommender → <code>POST /api/v1/recommender/association-rules</code></li>
+            <li>Cluster Predictor (Advanced) → <code>POST /api/v1/models/kmeans-cluster/predictions</code> (if implemented)</li>
+        </ul>
+
+        <h3>Public Hosted Demo</h3>
+        <p>Gradio/Streamlit App: <strong>[Paste your Hugging Face / Streamlit Cloud URL here]</strong></p>
+    </div>
+
+</div>
+
+<script>
+const API_BASE = "http://127.0.0.1:5000/api/v1";  // Change to your production URL if needed (e.g. https://yourdomain.com/api/v1)
+
+async function callRecommender() {
+    const input = document.getElementById("products").value.trim();
+    if (!input) return alert("Enter at least one product");
+    const products = input.split(",").map(p => p.trim());
+
+    try {
+        const response = await fetch(`${API_BASE}/recommender/association-rules`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ products })
+        });
+        const data = await response.json();
+        document.getElementById("recommenderResult").textContent = response.ok
+            ? JSON.stringify(data, null, 2)
+            : `Error ${response.status}: ${data.error || 'Unknown error'}`;
+    } catch (err) {
+        document.getElementById("recommenderResult").innerHTML = `<span class="error">Network error: ${err.message}</span>`;
+    }
+}
+
+async function callClassifier(modelSlug) {
+    const payload = {
+        Month: document.getElementById("month").value.trim(),
+        VisitorType: document.getElementById("visitorType").value,
+        Weekend: document.getElementById("weekend").value === "true",
+        // Minimal required fields – fill defaults for demo
+        Administrative: 0, Administrative_Duration: 0.0,
+        Informational: 0, Informational_Duration: 0.0,
+        ProductRelated: 5, ProductRelated_Duration: 120.0,
+        BounceRates: 0.02, ExitRates: 0.03,
+        PageValues: 0.0, SpecialDay: 0.0,
+        OperatingSystems: 2, Browser: 2,
+        Region: 1, TrafficType: 1
+    };
+
+    try {
+        const response = await fetch(`${API_BASE}/models/${modelSlug}/predictions`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        document.getElementById("classifierResult").textContent = response.ok
+            ? `Model: ${modelSlug.toUpperCase()}\n${JSON.stringify(data, null, 2)}`
+            : `Error ${response.status}: ${data.error || 'Invalid input'}`;
+    } catch (err) {
+        document.getElementById("classifierResult").innerHTML = `<span class="error">Network error: ${err.message}</span>`;
+    }
+}
+</script>
+
 </body>
 </html>
