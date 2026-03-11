@@ -1,26 +1,34 @@
-# Lab Submission Instruction
+ # Lab Submission Instruction
 
-## BBT 4206 - CAT 1 (Takeaway) - Due Date: 28th February 2026
+## BBT 4206 - CAT 1 (Takeaway) - Due Date: 11th March 2026
 
 ## Student Details and Individual Member Contributions
 
-**Name of the team on GitHub Classroom:**
+**Name of the team on GitHub Classroom:** lab-on-serving-ml-models-202509-b
 
 **Member 1:**
 
 | **Details**                                                                                                                           | **Comment** |
 |:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+| **Student ID**                                                                                                                        | 149008      |
+| **Name**                                                                                                                              | Godwill Kiplagat |
+| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Implemented the entire lab on the [main branch](https://github.com/BI-course/lab-on-serving-ml-models-202509-b/tree/main):<br/>**Part A:** Updated `api.py` with RESTful API endpoints for all 4 classifiers (Naive Bayes, KNN, SVM, Random Forest) plus the existing Decision Tree classifier and regressor. Each endpoint handles JSON input, applies the correct preprocessing (label encoding, one-hot encoding, scaling), and returns predictions.<br/>**Part B:** Added a product recommender endpoint based on Apriori association rules from the Groceries dataset. The endpoint accepts a list of products and returns recommended products with confidence and lift scores.<br/>**Frontend:** Created HTML test pages with forms for each API endpoint (NB, KNN, SVM, RF classifiers and Recommender). Updated `index.html` to list all 7 endpoints.<br/>**Public Hosting:** Updated the Streamlit app (`streamlit-sharing-using-streamlit/app.py`) with a multi-tab dashboard serving all models and the recommender. Deployed to Streamlit Community Cloud. >**What I learned:** How to serve ML models through RESTful APIs using Flask, how to handle preprocessing pipelines (label encoders, scalers, one-hot encoders) at inference time, the importance of case-sensitive file paths when deploying to Linux-based cloud platforms, and how to containerize Flask apps with Gunicorn + Nginx for production. |
 
 **Member 2:**
 
 | **Details**                                                                                                                           | **Comment** |
 |:--------------------------------------------------------------------------------------------------------------------------------------|:------------|
-| **Student ID**                                                                                                                        |             |
-| **Name**                                                                                                                              |             |
-| **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** |             |
+| **Student ID**                                                                                                                        |  093624           |
+| **Name**                                                                                                                              | David Wahome Waweru            |
+| **What part of the lab did you personally<br/>contribute to?** | Implemented and tested the decision tree classifier and regressor endpoints, prepared sample JSON payloads, created individual test HTML pages for DT models, assisted with association rules CSV loading and recommender logic.I also updated api.py with endpoints for all four required classifiers (Naive Bayes, kNN, SVM, Random Forest), implemented the association rules recommender, added the advanced k-Means cluster predictor endpoint, added comprehensive error handling (400/422 responses for missing/invalid input), created a unified dashboard in frontend/index.html with vanilla JavaScript fetch calls demonstrating multiple endpoints, and prepared the local Docker + Gunicorn setup. 
+|**Link:**                                                                                                                        |  https://github.com/BI-course/lab-on-serving-ml-models-202509-b.git           |
+| **What I learned:**                                                                                                                        |  How critical proper input validation and meaningful error responses are for real-world API usability, why Flask endpoint name collisions happen and how to fix them using unique function names or explicit endpoint parameters, the importance of CORS configuration for browser-based frontends, the API delivery layer often matters more to stakeholders than the model accuracy itself and how to structure a simple vanilla JS dashboard to consume the API          | 
+
+
+
+
+****   
+
 
 **Member 3:**
 
@@ -48,7 +56,7 @@
 
 ## Chosen Level of Difficulty
 
-**Specify the chosen level of difficulty** (baseline, intermediate, or advanced):
+**Specify the chosen level of difficulty** (baseline, intermediate, or advanced): Advanced
 
 ## Video Demonstration
 
@@ -57,10 +65,11 @@ Submit the link to a short video (not more than 5 minutes) demonstrating your so
 Note that you are required to submit the link to the video and NOT the video itself. The video should NOT be uploaded to your repository—that would be a misuse of GitHub.
 
 **Link to the video:**
+https://drive.google.com/file/d/1HXMi84XHWoIGKiECfFSDXG6TOtETXavC/view?usp=drive_link
 
 ## Public URL
 
-**Specify the public URL to the Gradio/Streamlit App**:
+**Specify the public URL to the Gradio/Streamlit App**: https://serving-ml-models-group-b.streamlit.app/
 
 ---
 

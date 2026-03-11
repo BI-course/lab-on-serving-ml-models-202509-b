@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SVM Classifier - Predict Online Shopper Purchase Intention</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            max-width: 600px;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Predict Online Shopper Purchase Intention using an SVM Classifier</h2>
+
+<form id="predictForm">
+    <label for="Administrative">Administrative:</label>
+    <input type="number" id="Administrative" name="Administrative" value="0" required>
+
+    <label for="Administrative_Duration">Administrative Duration:</label>
+    <input type="number" id="Administrative_Duration" name="Administrative_Duration" step="0.01" value="0.0" required>
+
+    <label for="Informational">Informational:</label>
+    <input type="number" id="Informational" name="Informational" value="0" required>
+
+    <label for="Informational_Duration">Informational Duration:</label>
+    <input type="number" id="Informational_Duration" name="Informational_Duration" step="0.01" value="0.0" required>
+
+    <label for="ProductRelated">Product Related:</label>
+    <input type="number" id="ProductRelated" name="ProductRelated" value="1" required>
+
+    <label for="ProductRelated_Duration">Product Related Duration:</label>
+    <input type="number" id="ProductRelated_Duration" name="ProductRelated_Duration" step="0.01" value="0.0" required>
+
+    <label for="BounceRates">Bounce Rates:</label>
+    <input type="number" id="BounceRates" name="BounceRates" step="0.0001" value="0.02" required>
+
+    <label for="ExitRates">Exit Rates:</label>
+    <input type="number" id="ExitRates" name="ExitRates" step="0.0001" value="0.05" required>
+
+    <label for="PageValues">Page Values:</label>
+    <input type="number" id="PageValues" name="PageValues" step="0.01" value="0.0" required>
+
+    <label for="SpecialDay">Special Day:</label>
+    <input type="number" id="SpecialDay" name="SpecialDay" step="0.1" value="0.0" required>
+
+    <label for="Month">Month:</label>
+    <select id="Month" name="Month" required>
+        <option value="Jan">Jan</option>
+        <option value="Feb" selected>Feb</option>
+        <option value="Mar">Mar</option>
+        <option value="May">May</option>
+        <option value="June">June</option>
+        <option value="Jul">Jul</option>
+        <option value="Aug">Aug</option>
+        <option value="Sep">Sep</option>
+        <option value="Oct">Oct</option>
+        <option value="Nov">Nov</option>
+        <option value="Dec">Dec</option>
+    </select>
+
+    <label for="OperatingSystems">Operating Systems:</label>
+    <input type="number" id="OperatingSystems" name="OperatingSystems" value="1" required>
+
+    <label for="Browser">Browser:</label>
+    <input type="number" id="Browser" name="Browser" value="1" required>
+
+    <label for="Region">Region:</label>
+    <input type="number" id="Region" name="Region" value="1" required>
+
+    <label for="TrafficType">Traffic Type:</label>
+    <input type="number" id="TrafficType" name="TrafficType" value="1" required>
+
+    <label for="VisitorType">Visitor Type:</label>
+    <select id="VisitorType" name="VisitorType" required>
+        <option value="Returning_Visitor" selected>Returning Visitor</option>
+        <option value="New_Visitor">New Visitor</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="Weekend">Weekend:</label>
+    <select id="Weekend" name="Weekend" required>
+        <option value="false" selected>No</option>
+        <option value="true">Yes</option>
+    </select>
+
+    <button type="submit">Predict</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('predictForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const data = {
+            Administrative: parseFloat(document.getElementById('Administrative').value),
+            Administrative_Duration: parseFloat(document.getElementById('Administrative_Duration').value),
+            Informational: parseFloat(document.getElementById('Informational').value),
+            Informational_Duration: parseFloat(document.getElementById('Informational_Duration').value),
+            ProductRelated: parseFloat(document.getElementById('ProductRelated').value),
+            ProductRelated_Duration: parseFloat(document.getElementById('ProductRelated_Duration').value),
+            BounceRates: parseFloat(document.getElementById('BounceRates').value),
+            ExitRates: parseFloat(document.getElementById('ExitRates').value),
+            PageValues: parseFloat(document.getElementById('PageValues').value),
+            SpecialDay: parseFloat(document.getElementById('SpecialDay').value),
+            Month: document.getElementById('Month').value,
+            OperatingSystems: parseInt(document.getElementById('OperatingSystems').value),
+            Browser: parseInt(document.getElementById('Browser').value),
+            Region: parseInt(document.getElementById('Region').value),
+            TrafficType: parseInt(document.getElementById('TrafficType').value),
+            VisitorType: document.getElementById('VisitorType').value,
+            Weekend: document.getElementById('Weekend').value === 'true'
+        };
+
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/v1/models/svm-classifier/predictions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            const prediction = result['Predicted Class = '];
+            document.getElementById('result').innerText = 'Prediction: ' + prediction + (prediction === 1 ? ' (Will Purchase)' : ' (No Purchase)');
+
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('result').innerText = 'An error occurred while making the prediction.';
+        }
+    });
+</script>
+
+</body>
+</html>

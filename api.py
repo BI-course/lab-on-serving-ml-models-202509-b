@@ -1,47 +1,21 @@
 from flask import Flask, request, jsonify
-# Cross-Origin Resource Sharing (CORS)
-# Modern browsers apply the "same-origin policy", which blocks web pages from
-# making requests to a different origin than the one that served the page.
-# This helps prevent malicious sites from reading sensitive data from another
-# site you are logged into.
-#
-# However, there are many legitimate cases where cross-origin requests are
-# needed. One example is:
-#
-## Single-Page Applications (SPA) hosted at example-frontend.com need to call
-## APIs hosted at api.example-backend.com.
-#
-# To support this safely, CORS lets servers explicitly allow such requests.
 from flask_cors import CORS
 import joblib
+import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
-# CORS(
-#     app,
-#     resources={r"/api/*": {
-#         "origins": [
-#             "https://127.0.0.1",
-#             "https://localhost"
-#         ]
-#     }},
-#     methods=["GET", "POST", "OPTIONS"],
-#     allow_headers=["Content-Type"]
-# )
 
+# CORS - generous for local development; tighten in production
 CORS(
-    app, supports_credentials=False,
-    resources={r"/api/*": { # This means CORS will only apply to routes that start with /api/
-               "origins": [
-                   "https://127.0.0.1", "https://localhost",
-                   "https://127.0.0.1:443", "https://localhost:443",
-                   "http://127.0.0.1", "http://localhost",
-                   "http://127.0.0.1:5000", "http://localhost:5000",
-                   "http://127.0.0.1:5500", "http://localhost:5500"
-                ]
+    app,
+    supports_credentials=False,
+    resources={r"/api/*": {
+        "origins": ["*"]  # ← for dev convenience; restrict later
     }},
     methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type"])
+    allow_headers=["Content-Type"]
+)
 
 # CORS(app, supports_credentials=False,
 #      origins=["*"])

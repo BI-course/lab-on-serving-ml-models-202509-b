@@ -26,7 +26,7 @@ Create the `.env` file based on the example provided in [env.example](env.exampl
 Execute the following command in the terminal to build the Linux (Ubuntu) Server image and then use the image to create the container:
 
 ```shell
-docker compose \
+docker compose \ 
   -f docker-compose-dev.yaml \
   up -d ubuntu-server
 ```
