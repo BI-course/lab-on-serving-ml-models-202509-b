@@ -63,7 +63,7 @@ dependencies isolated from the system Python packages.
    the virtual environment. This will use the global python version.
 
     ```shell
-    python -m venv .venv
+   python --version
     ```
 
    - If you want to use a specific python version to create your virtual environment, then use the python interpreter located in the correct path.
