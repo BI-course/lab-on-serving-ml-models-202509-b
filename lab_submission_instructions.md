@@ -65,7 +65,7 @@ Submit the link to a short video (not more than 5 minutes) demonstrating your so
 Note that you are required to submit the link to the video and NOT the video itself. The video should NOT be uploaded to your repository—that would be a misuse of GitHub.
 
 **Link to the video:**
-https://drive.google.com/drive/folders/1de3ZC7eaHRYE6SEfH5TcuPII4_x6uIFc?usp=drive_link
+https://drive.google.com/file/d/1HXMi84XHWoIGKiECfFSDXG6TOtETXavC/view?usp=drive_link
 
 ## Public URL
 
