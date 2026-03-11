@@ -23,8 +23,8 @@ RUN useradd -m -s /bin/bash student && \
     chmod 0440 /etc/sudoers.d/student
 
 # Copy entrypoint
-#COPY entrypoint.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 #ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]

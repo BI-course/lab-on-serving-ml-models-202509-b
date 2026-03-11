@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serving ML Models - BBT 4206 Demo</title>
+    <title>Serving ML Models - BBT 4206 (Group B Demo) </title>
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -69,7 +69,7 @@
 
 <div class="container">
 
-    <h1>Serving Machine Learning Models via Flask API</h1>
+    <h1>Serving Machine Learning Models through a RESTish API using Flask in Python</h1>
 
     <div class="section">
         <table>
@@ -79,7 +79,7 @@
             <tr><td><strong>Semester</strong></td><td>January – April 2026</td></tr>
             <tr><td><strong>Lecturer</strong></td><td>Allan Omondi</td></tr>
             <tr><td><strong>Contact</strong></td><td><a href="mailto:aomondi@strathmore.edu">aomondi@strathmore.edu</a></td></tr>
-            <tr><td><strong>Note</strong></td><td>Educational use only.<br>Recommended citation: <a href="https://raw.githubusercontent.com/course-files/ServingMLModels/refs/heads/main/RecommendedCitation.bib">BibTeX</a></td></tr>
+            <tr><td><strong>Note</strong></td><td> Intended for educational purposes only.<br>Recommended citation: <a href="https://raw.githubusercontent.com/course-files/ServingMLModels/refs/heads/main/RecommendedCitation.bib">BibTeX</a></td></tr>
         </table>
     </div>
 
@@ -143,13 +143,13 @@
         </ul>
 
         <h3>Public Hosted Demo</h3>
-        <p>Gradio/Streamlit App: <strong>[Paste your Hugging Face / Streamlit Cloud URL here]</strong></p>
+        <p>Gradio/Streamlit App: <strong>https://serving-ml-models-group-b.streamlit.app/</strong></p>
     </div>
 
 </div>
 
 <script>
-const API_BASE = "http://127.0.0.1:5000/api/v1";  // Change to your production URL if needed (e.g. https://yourdomain.com/api/v1)
+const API_BASE = "http://127.0.0.1:5000/api/v1";  
 
 async function callRecommender() {
     const input = document.getElementById("products").value.trim();

@@ -64,7 +64,7 @@ try:
 except Exception as e:
     print(f"Error loading core models: {e}")
 
-# Optional: K-Means (advanced) - won't crash if missing
+# K-Means (advanced) 
 try:
     models['kmeans'] = joblib.load('./model/kmeans_model.pkl')
     preprocessors['scaler_cluster'] = joblib.load('./model/scaler_cluster.pkl')  # adjust name if different
@@ -302,7 +302,7 @@ def recommend_products():
         return jsonify({"error": str(e)}), 422
 
 # ───────────────────────────────────────────────
-# Optional: K-Means Cluster Predictor (advanced)
+# K-Means Cluster Predictor (advanced)
 # ───────────────────────────────────────────────
 @app.route('/api/v1/models/kmeans-cluster/predictions', methods=['POST'])
 def predict_cluster():

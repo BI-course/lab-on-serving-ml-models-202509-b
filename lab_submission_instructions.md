@@ -1,6 +1,6 @@
 # Lab Submission Instruction
 
-## BBT 4206 - CAT 1 (Takeaway) - Due Date: 28th February 2026
+## BBT 4206 - CAT 1 (Takeaway) - Due Date: 11th March 2026
 
 ## Student Details and Individual Member Contributions
 
@@ -21,9 +21,10 @@
 | **Student ID**                                                                                                                        |  093624           |
 | **Name**                                                                                                                              | David Wahome Waweru            |
 | **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Implemented and tested the decision tree classifier and regressor endpoints, prepared sample JSON payloads, created individual test HTML pages for DT models, assisted with association rules CSV loading and recommender logic.I also updated api.py with endpoints for all four required classifiers (Naive Bayes, kNN, SVM, Random Forest), implemented the association rules recommender, added the advanced k-Means cluster predictor endpoint, added comprehensive error handling (400/422 responses for missing/invalid input), created a unified dashboard in frontend/index.html with vanilla JavaScript fetch calls demonstrating multiple endpoints, and prepared the local Docker + Gunicorn setup.
-Link: 
+|Link: | 
 https://github.com/BI-course/lab-on-serving-ml-models-202509-b.git  
-What I learned:How critical proper input validation and meaningful error responses are for real-world API usability, Why Flask endpoint name collisions happen and how to fix them using unique function names or explicit endpoint parameters, The importance of CORS configuration for browser-based frontends, That the API delivery layer often matters more to stakeholders than the model accuracy itself, How to structure a simple vanilla JS dashboard to consume the API        |
+|What I learned:|
+How critical proper input validation and meaningful error responses are for real-world API usability, why Flask endpoint name collisions happen and how to fix them using unique function names or explicit endpoint parameters, the importance of CORS configuration for browser-based frontends, the API delivery layer often matters more to stakeholders than the model accuracy itself and how to structure a simple vanilla JS dashboard to consume the API        |
 
 **Member 3:**
 
@@ -60,6 +61,7 @@ Submit the link to a short video (not more than 5 minutes) demonstrating your so
 Note that you are required to submit the link to the video and NOT the video itself. The video should NOT be uploaded to your repository—that would be a misuse of GitHub.
 
 **Link to the video:**
+https://drive.google.com/drive/folders/1de3ZC7eaHRYE6SEfH5TcuPII4_x6uIFc?usp=drive_link
 
 ## Public URL
 
