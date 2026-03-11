@@ -21,10 +21,10 @@
 | **Student ID**                                                                                                                        |  093624           |
 | **Name**                                                                                                                              | David Wahome Waweru            |
 | **What part of the lab did you personally<br/>contribute to (provide a link to the<br/>branch(es)), and what did you learn from it?** | Implemented and tested the decision tree classifier and regressor endpoints, prepared sample JSON payloads, created individual test HTML pages for DT models, assisted with association rules CSV loading and recommender logic.I also updated api.py with endpoints for all four required classifiers (Naive Bayes, kNN, SVM, Random Forest), implemented the association rules recommender, added the advanced k-Means cluster predictor endpoint, added comprehensive error handling (400/422 responses for missing/invalid input), created a unified dashboard in frontend/index.html with vanilla JavaScript fetch calls demonstrating multiple endpoints, and prepared the local Docker + Gunicorn setup.
-|Link: | 
-https://github.com/BI-course/lab-on-serving-ml-models-202509-b.git  
-|What I learned:|
-How critical proper input validation and meaningful error responses are for real-world API usability, why Flask endpoint name collisions happen and how to fix them using unique function names or explicit endpoint parameters, the importance of CORS configuration for browser-based frontends, the API delivery layer often matters more to stakeholders than the model accuracy itself and how to structure a simple vanilla JS dashboard to consume the API        |
+
+   **Link:**    https://github.com/BI-course/lab-on-serving-ml-models-202509-b.git
+
+   **What I learned:**    How critical proper input validation and meaningful error responses are for real-world API usability, why Flask endpoint name collisions happen and how to fix them using unique function names or explicit endpoint parameters, the importance of CORS configuration for browser-based frontends, the API delivery layer often matters more to stakeholders than the model accuracy itself and how to structure a simple vanilla JS dashboard to consume the API
 
 **Member 3:**
 
